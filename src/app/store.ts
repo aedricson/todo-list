@@ -1,10 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
-import todosReducer from '../features/todosSlice';
+import todosReducer, { localStorageMiddleware, rehydrateStore } from '../features/todosSlice';
 
 const store = configureStore({
   reducer: {
     todos: todosReducer,
-  }
+  },
+  preloadedState: rehydrateStore(),
+  middleware: getDefaultMiddleware => {
+    return getDefaultMiddleware().concat(localStorageMiddleware);
+  },
 });
 
 export default store;

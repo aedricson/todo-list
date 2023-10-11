@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Todo } from '../types/Todo';
 
-const initialState: Todo[] | null = [
+const initialState: Todo[] = [
   {
     id: +new Date(),
     user: 'Ihor Shynkar',
@@ -55,5 +55,23 @@ export const todosSlice = createSlice({
 });
 
 export const { add, edit, remove, setStatus } = todosSlice.actions;
+
+export const localStorageMiddleware = ({ getState }: {getState: () => void} ) => {
+  return (next: (arg0: any) => any) => (action: any) => {
+    const res = next(action);
+
+    localStorage.setItem('todos', JSON.stringify(getState()))
+
+    return res;
+  };
+};
+
+export const rehydrateStore = () => {
+  const data = localStorage.getItem('todos');
+  
+  if (data !== null) {
+    return JSON.parse(data);
+  }
+}
 
 export default todosSlice.reducer;
