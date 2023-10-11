@@ -1,3 +1,3 @@
 # Todo List
 
-[Create new list](https://aedricson.github.io/todo-list/)
+[Click here to test application](https://aedricson.github.io/todo-list/)
