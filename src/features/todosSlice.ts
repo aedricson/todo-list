@@ -11,7 +11,7 @@ const initialState: Todo[] | null = [
     createdAt: new Date().toString(),
   },
   {
-    id: 12345,
+    id: 123456,
     user: 'Martin King',
     title: 'Learn React',
     description: 'Hooks, Custom hooks',
@@ -19,7 +19,7 @@ const initialState: Todo[] | null = [
     createdAt: new Date().toString(),
   },
   {
-    id: 12345,
+    id: 123457,
     user: 'Alice Thorn',
     title: 'Learn NodeJs',
     description: 'OOP, SQL',
@@ -28,6 +28,11 @@ const initialState: Todo[] | null = [
   }
 ];
 
+type SetStatus = {
+  id: number,
+  status: boolean
+}
+
 export const todosSlice = createSlice({
   name: 'todos',
   initialState,
@@ -35,15 +40,33 @@ export const todosSlice = createSlice({
     add: (todos, action: PayloadAction<Todo>) => {
       todos.push(action.payload);
     },
-    edit: (todos, action: PayloadAction<number>) => {
-      todos.find(todo => todo.id === action.payload)
+    edit: (todos, action: PayloadAction<Todo>) => {
+      return todos.map(todo => {
+        if (todo.id === action.payload.id) {
+          return action.payload;
+        }
+
+        return todo;
+      })
     },
     remove: (todos, action: PayloadAction<Todo>) => {
       return todos.filter(todo => todo.id !== action.payload.id)
+    },
+    setStatus: (todos, action: PayloadAction<SetStatus>) => {
+      return todos.map(todo => {
+        if (todo.id === action.payload.id) {
+          return {
+            ...todo,
+            completed: action.payload.status,
+          }
+        }
+
+        return todo;
+      })
     }
   }
 });
 
-export const { add, edit, remove } = todosSlice.actions;
+export const { add, edit, remove, setStatus } = todosSlice.actions;
 
 export default todosSlice.reducer;

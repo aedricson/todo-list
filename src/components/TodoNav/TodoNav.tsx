@@ -39,7 +39,11 @@ export const TodoNav: React.FC = () => {
         </Form>
       </Container>
 
-      <TodoAddModal show={show} onClose={handleCloseModal} />
+      <TodoAddModal
+        show={show}
+        onClose={handleCloseModal}
+        todo={null}
+      />
     </Navbar>
   );
 }

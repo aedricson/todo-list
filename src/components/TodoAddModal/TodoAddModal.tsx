@@ -2,19 +2,27 @@ import React, { FormEvent, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { Todo } from '../../types/Todo';
 import { useAppDispatch } from '../../app/hooks';
-import { add } from '../../features/todosSlice';
+import { add, edit } from '../../features/todosSlice';
 
 type Props = {
   show: boolean;
   onClose: () => void,
+  todo: Todo | null,
 }
 
-export const TodoAddModal: React.FC<Props> = ({ show, onClose }) => {
-  const [username, setUsername] = useState('');
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+export const TodoAddModal: React.FC<Props> = ({ show, onClose, todo }) => {
+  const [username, setUsername] = useState(todo ? todo.user : '');
+  const [title, setTitle] = useState(todo ? todo.title : '');
+  const [description, setDescription] = useState(todo ? todo.description : '');
 
   const dispatch = useAppDispatch();
+
+  const handleReset = () => {
+    setUsername('');
+    setTitle('');
+    setDescription('');
+    onClose();
+  }
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -29,6 +37,24 @@ export const TodoAddModal: React.FC<Props> = ({ show, onClose }) => {
     }
 
     dispatch(add(newTodo));
+    handleReset();
+  }
+
+  const handleEdit = () => {
+    if (todo) {
+      const todoToEdit: Todo = {
+        ...todo,
+        user: username,
+        title,
+        description,
+      }
+  
+      dispatch(edit(todoToEdit));
+
+      handleReset();
+    } else {
+      return;
+    }
   }
 
   return (
@@ -78,11 +104,19 @@ export const TodoAddModal: React.FC<Props> = ({ show, onClose }) => {
             Close
           </Button>
 
-          <Button variant="success" disabled>
+          <Button
+            variant="success"
+            disabled={todo ? false : true}
+            onClick={() => handleEdit()}
+          >
             Save changes
           </Button>
 
-          <Button variant="primary" type='submit'>
+          <Button
+            variant="primary"
+            type='submit'
+            disabled={todo ? true : false}
+          >
             Add
           </Button>
         </Modal.Footer>
