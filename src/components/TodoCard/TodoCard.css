@@ -1,3 +1,11 @@
+.todoCard {
+  margin-bottom: 10px;
+}
+
+.todoCard:last-child {
+  margin-bottom: 0;
+}
+
 .todoCard__buttons {
   display: flex;
   gap: 10px;
