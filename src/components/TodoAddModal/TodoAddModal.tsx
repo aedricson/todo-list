@@ -33,7 +33,7 @@ export const TodoAddModal: React.FC<Props> = ({ show, onClose, todo }) => {
       title: title.trim(),
       description: description.trim(),
       completed: false,
-      createdAt: new Date().toLocaleDateString('sv'),
+      createdAt: new Date().toLocaleString('sv'),
     }
 
     dispatch(add(newTodo));
