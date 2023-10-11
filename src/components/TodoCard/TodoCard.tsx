@@ -6,21 +6,35 @@ import { Todo } from '../../types/Todo';
 import { TodoAddModal } from '../TodoAddModal';
 import { useAppDispatch } from '../../app/hooks';
 import { remove, setStatus } from '../../features/todosSlice';
+import { TodoDeleteModal } from '../TodoDeleteModal';
 
 type Props = {
   todo: Todo;
 }
 
 export const TodoCard: React.FC<Props> = ({ todo }) => {
-  const [show, setShow] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const dispatch = useAppDispatch();
 
-  const handleOpenModal = () => {
-    setShow(true);
+  const handleOpenAddModal = () => {
+    setShowAddModal(true);
   }
 
-  const handleCloseModal = () => {
-    setShow(false);
+  const handleCloseAddModal = () => {
+    setShowAddModal(false);
+  }
+
+  const handleOpenDeleteModal = () => {
+    setShowDeleteModal(true);
+  }
+
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false);
+  }
+
+  const handleDeleteTodo = () => {
+    dispatch(remove(todo));
   }
 
   return (
@@ -48,15 +62,15 @@ export const TodoCard: React.FC<Props> = ({ todo }) => {
           {todo.completed ? (
             <Button
               variant="warning"
-              onClick={() => dispatch(setStatus({id: todo.id, status: false}))}
+              onClick={() => dispatch(setStatus({ id: todo.id, status: false }))}
             >
               Set active
             </Button>
           ) : (
             <Button
-              variant="primary"
+              variant="success"
               disabled={todo.completed}
-              onClick={() => dispatch(setStatus({id: todo.id, status: true}))}
+              onClick={() => dispatch(setStatus({ id: todo.id, status: true }))}
             >
               Complete
             </Button>
@@ -64,14 +78,14 @@ export const TodoCard: React.FC<Props> = ({ todo }) => {
 
           <Button
             variant="secondary"
-            onClick={() => handleOpenModal()}
+            onClick={() => handleOpenAddModal()}
           >
             Edit
           </Button>
 
           <Button
             variant="danger"
-            onClick={() => dispatch(remove(todo))}
+            onClick={() => handleOpenDeleteModal()}
           >
             Delete
           </Button>
@@ -79,11 +93,19 @@ export const TodoCard: React.FC<Props> = ({ todo }) => {
       </Card.Body>
       <Card.Footer className="text-muted">Created at: {todo.createdAt}</Card.Footer>
 
-      {show && (
+      {showAddModal && (
         <TodoAddModal
-          show={show}
-          onClose={handleCloseModal}
+          show={showAddModal}
+          onClose={handleCloseAddModal}
           todo={todo}
+        />
+      )}
+
+      {showDeleteModal && (
+        <TodoDeleteModal
+          show={showDeleteModal}
+          onClose={handleCloseDeleteModal}
+          onDelete={handleDeleteTodo}
         />
       )}
     </Card>

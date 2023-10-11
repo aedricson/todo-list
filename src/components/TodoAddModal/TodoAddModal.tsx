@@ -29,11 +29,11 @@ export const TodoAddModal: React.FC<Props> = ({ show, onClose, todo }) => {
 
     const newTodo: Todo = {
       id: +new Date(),
-      user: username,
-      title,
-      description,
+      user: username.trim(),
+      title: title.trim(),
+      description: description.trim(),
       completed: false,
-      createdAt: new Date().toString(),
+      createdAt: new Date().toLocaleDateString('sv'),
     }
 
     dispatch(add(newTodo));
@@ -48,7 +48,7 @@ export const TodoAddModal: React.FC<Props> = ({ show, onClose, todo }) => {
         title,
         description,
       }
-  
+
       dispatch(edit(todoToEdit));
 
       handleReset();
@@ -68,33 +68,36 @@ export const TodoAddModal: React.FC<Props> = ({ show, onClose, todo }) => {
           <Form.Group className="mb-3" controlId="formGroupName">
             <Form.Label>Username</Form.Label>
 
-            <Form.Control 
-              type="text" 
+            <Form.Control
+              required
+              type="text"
               placeholder="Enter username"
               value={username}
-              onChange={(event) => setUsername(event.target.value)}
+              onChange={(event) => setUsername(event.target.value.trimStart())}
             />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formGroupTitle">
             <Form.Label>Title</Form.Label>
 
-            <Form.Control 
-              type="text" 
-              placeholder="Enter title" 
+            <Form.Control
+              required
+              type="text"
+              placeholder="Enter title"
               value={title}
-              onChange={(event) => setTitle(event.target.value)}
+              onChange={(event) => setTitle(event.target.value.trimStart())}
             />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formGroupDescription">
             <Form.Label>Description</Form.Label>
 
-            <Form.Control 
-              type="text" 
-              placeholder="Enter description" 
+            <Form.Control
+              required
+              type="text"
+              placeholder="Enter description"
               value={description}
-              onChange={(event) => setDescription(event.target.value)}
+              onChange={(event) => setDescription(event.target.value.trimStart())}
             />
           </Form.Group>
         </Modal.Body>
